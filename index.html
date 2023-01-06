@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Options Cinema Salary</title>
+    <style>
+    *{
+    font-family: cursive;
+    margin: 0;
+    padding:0;
+    }
+    body{
+    background-color: #bba7da;
+
+    }
+    sup{
+text-shadow: 1px 2px 2px #c44ed2;
+    color: wheat;
+    }
+    .header{
+    text-align: center;
+    padding: 15px;
+    color: #ca9625;
+    margin: 0px;
+    background: #4f3276;
+    }
+    .content-form{
+    margin-top:10px;
+    display:grid;
+    grid-gap: 11px;
+    justify-content:center;
+    }
+    .content-form > div{
+    border-bottom: 1px solid #3f51b5;
+    border-radius: 14px;
+    box-shadow: 1px 2px 10px #a18bb2;
+    padding: 3px 9px;
+    padding-bottom: 2px;
+    border-bottom: 1px solid #7f158b;
+    }
+    .content-form p{
+    font-size:21px;
+    }
+    sup > sup{
+    text-shadow: none;
+    display:none;
+    }
+    sup:hover > sup{
+    color: black;
+    display:inline;
+    }
+    .holidayOfWorking{
+    display: grid;
+    grid-template-columns: 1fr 30px;
+    }
+    input{
+    text-align:center;
+    margin-top:3px;
+    font-size:18px;
+    border-radius:20px;
+    padding-left:3px;
+    padding-top:3px;
+    padding-bottom: 1px;
+    }
+    input[type="button"]{
+    color: #52cb5d;
+    background: #712077;
+    }
+    h1{
+    text-align:center;
+    }
+    .firstPart, .secondPart{
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    text-align: center;
+}
+.showMessage{
+font-size:18px;
+display:grid;
+ justify-content:center;
+}
+.showMessage > div *{
+border:1px solid;
+border-collapse:collapse;
+}
+
+    }
+    </style>
+</head>
+<body>
+ <div class="header">
+     <h1>Option Cinema Μισθός</h1>
+    </div>
+    <form id="form" action="" >
+            <div class="content-form">
+            <div class = "daysOfWorking">
+                <p>Ημέρες<sup>?<sup>Αριθμός Ημερών Εργασία</sup ></sup></p>
+            <input min="1" id="days" type="number">
+            </div>
+            <div class="hoursOfWorking">
+                <p>Ώρες Εργασίας<sup>?<sup>π.χ5ώρα ή 6ωρά</sup></sup></p>
+                <input type="number" id="hours" min="1">
+            </div>
+        <div class = "holidayOfWorking">
+            <p>Αργία<sup>?<sup>Επιλέξτε μόνο εφόσον τα παραπάνω είναι αργίες</sup ></sup></p><input type="checkbox" id="checkHoliday">
+        </div>
+        <div class="moreHoursOfWorking">
+            <p>Υπερωρίες:</p>
+
+            <p>Μέρες</p><input type="number" id="moreThanNormalD" min="0" value="1">
+            <p>Ώρες</p> <input type="number" id="moreThanNormalH" min="0" value="0">
+        </div>
+
+            <input type="button" value="Προσθήκη" onclick="add()">
+            </div>
+    </form>
+
+    <h1>Υπολογισμός</h1>
+     <div class="showMessage">
+
+         <div class="firstPart">
+             <p>Μέρες</p>
+             <p>Ώρες</p>
+             <p>Υπερωρίες</p>
+             <p>Αργίες</p>
+
+         </div>
+     <div class="secondPart">
+            <p id ="sum_days"></p>
+             <p id="sum_hours"></p>
+             <p id="sum_more"></p>
+             <p id="sum_holiday" ></p>
+     </div>
+     </div>
+         <h1 >Σύνολο: <span id="result"></span></h1>
+    <script>
+    
+    //kwdikoi:
+        var salary =0;
+        var normal = 3.7;
+        var moreHours = normal * 0.25 + normal;
+        var holiday = normal * 0.75 + normal;
+
+        var sum_holidayV=0;
+        var sum_dayN = 0;
+       var  sum_hoursN =0;
+        var sum_moreV=0;
+        var sum_daysV=0;
+        var sum_hoursV=0;
+    // inputs:
+        var form
+        var days;
+        var hours;
+        var checkHoliday;
+        var moreThanNormalD;
+        var moreThanNormalH;
+      //  var moreThanNormal = moreThanNormalD * moreThanNormalH;
+      function add(){
+        //salary =0;
+
+        form = document.getElementById("form");
+        days = document.getElementById("days").value;
+        hours = document.getElementById("hours").value;
+        moreThanNormalD = document.getElementById("moreThanNormalD").value;
+        moreThanNormalH =document.getElementById("moreThanNormalH").value;
+        checkHoliday = document.getElementById("checkHoliday");
+
+        let sum_days = document.getElementById("sum_days");
+        let sum_hours = document.getElementById("sum_hours") ;
+        let sum_holiday = document.getElementById("sum_holiday");
+        let sum_more = document.getElementById("sum_more");
+        //moreThanNormal = moreThanNormalD * moreThanNormalH;
+
+        if(checkValue()){
+        let message;
+        if(days <1 && hours <1){
+        message = "Δωσε στις μέρες και στις ώρες μια τιμή μαλύτερη του 0";
+        }
+        else if(days < 1 && hours > 0){
+        message = "Δώσε στις μέρες τιμή μεγαλύτερη του 0";
+        }
+        else{
+        message = "Δώσε στις ώρες τιμή μεφαλύτερη του 0";
+        }
+        alert(message);
+        }
+        else{
+           if(checkHoliday.checked){
+            console.log("hi");
+
+            if((moreThanNormalD * moreThanNormalH) > 0){
+             if(moreThanNormalD * moreThanNormalH >= days*hours || moreThanNormalD > days){
+           alert("Συπληρώστε σωστά τα στοιχεία: \n1. Το σύνολο ωρών να μην είναι μικρότερο ή ίσο απο τις υπερωρίες. 2.Οι συνολικες ημέρες να μην ειναι λιγότερες ");}
+           else{
+            let normalDay = (days * hours) - (moreThanNormalD * moreThanNormalH);
+             sum_holidayV += parseFloat(days * hours);
+             sum_dayN+= parseInt(days);
+             salary +=  normalDay * holiday +  ((moreThanNormalD * moreThanNormalH) * (normal + normal));
+             sum_moreV +=moreThanNormalD * moreThanNormalH;
+
+             }
+            }
+            else{
+            sum_holidayV += parseFloat(days * hours);
+            sum_dayN+= parseInt(days);
+            salary += (days * hours)*holiday;
+
+            }
+           }
+           else if((moreThanNormalD * moreThanNormalH) > 0 ){
+           if(moreThanNormalD * moreThanNormalH >= days*hours || moreThanNormalD > days){
+           alert("Συπληρώστε σωστά τα στοιχεία: \n1. Το σύνολο ωρών να μην είναι μικρότερο ή ίσο απο τις υπερωρίες. 2.Οι συνολικες ημέρες να μην ειναι λιγότερες ");}
+           else{
+           let normalDay = (days * hours) - (moreThanNormalD * moreThanNormalH);
+           salary += (moreThanNormalD * moreThanNormalH * moreHours) + (normalDay*normal) ;
+           sum_moreV +=moreThanNormalD * moreThanNormalH;
+           sum_dayN+= parseInt(days);
+           }
+           }else{
+           salary+= days * hours * normal;
+           sum_dayN+= parseInt(days);
+           sum_hoursN += parseFloat(days * hours);
+           }
+           sum_daysV = sum_dayN;
+           sum_hoursV = sum_daysV * hours ;
+
+
+           }
+
+
+
+
+        form.reset();
+        sum_days.innerHTML = sum_daysV;
+        sum_hours.innerHTML = sum_hoursV;
+        sum_more.innerHTML = `${sum_moreV} ώρες`;
+        sum_holiday.innerHTML = `${sum_holidayV} ώρες`;
+        document.getElementById("result").innerHTML = `${salary.toFixed(2)}`;
+        }
+
+
+        function checkValue(){
+        let message=0;
+        if(days<1 || hours < 1){
+        return true;}
+
+
+        }
+
+
+
+
+
+    </script>
+</body>
+</html>
